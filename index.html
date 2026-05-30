@@ -38,6 +38,14 @@
             white-space: pre-wrap;
         }
 
+        .purple {
+            color: #b19cd9;
+        }
+
+        .light-blue-grey {
+            color: #a8c5dd;
+        }
+
         input {
             background-color: transparent;
             border: none;
@@ -71,6 +79,17 @@
 </head>
 <body>
     <div class="terminal" id="terminal">
+        <div class="terminal-line">archiso login: root (automatic login)</div>
+        <div class="terminal-line"></div>
+        <div class="terminal-line">to install <span class="light-blue-grey">Arch Linux</span> follow the <span class="purple">installation guide</span>:</div>
+        <div class="terminal-line"><span class="purple">https://wiki.archlinux.org/title/Installation_guide</span></div>
+        <div class="terminal-line"></div>
+        <div class="terminal-line">For Wi-Fi, authenticate to the wireless network using the <span class="purple">iwctl</span> utility.</div>
+        <div class="terminal-line">For mobile broadband (WWAN) modems, connect with the <span class="purple">mmcli</span> utility.</div>
+        <div class="terminal-line">Ethernet, WLAN and WLAN interfaces using DHCP should work automatically</div>
+        <div class="terminal-line"></div>
+        <div class="terminal-line">After connecting to the internet, the <span class="purple">installation guide</span> can be accessed via the convenience script installation_guide.</div>
+        <div class="terminal-line"></div>
         <div class="terminal-line" id="inputLine">
             <input type="text" id="commandInput" autofocus>
         </div>
