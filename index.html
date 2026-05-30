@@ -3,22 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InstallArch - Practice Terminal</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>InstallArch Terminal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000;
+            font-family: 'Courier New', monospace;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .terminal {
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            color: #ffffff;
+            padding: 20px;
+            overflow-y: auto;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .terminal-line {
+            min-height: 1.5em;
+        }
+
+        input {
+            background-color: transparent;
+            border: none;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            outline: none;
+            width: 100%;
+        }
+
+        input::placeholder {
+            color: #666666;
+        }
+
+        .terminal::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .terminal::-webkit-scrollbar-track {
+            background: #000000;
+        }
+
+        .terminal::-webkit-scrollbar-thumb {
+            background: #444444;
+        }
+
+        .terminal::-webkit-scrollbar-thumb:hover {
+            background: #666666;
+        }
+    </style>
 </head>
 <body>
-    <div class="terminal">
-        <div class="terminal-header">root@archlinux ~ #</div>
-        <div class="terminal-content" id="terminalContent">
-            <div class="terminal-line">Welcome to InstallArch - Arch Linux Installation Practice</div>
-            <div class="terminal-line">Type 'help' to see available commands</div>
-            <div class="terminal-line"></div>
-        </div>
-        <div class="terminal-input">
-            <span class="prompt">root@archlinux ~ #</span>
+    <div class="terminal" id="terminal">
+        <div class="terminal-line" id="inputLine">
             <input type="text" id="commandInput" autofocus>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        const terminal = document.getElementById('terminal');
+        const commandInput = document.getElementById('commandInput');
+
+        commandInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                const text = commandInput.value;
+                
+                // Create new line with the typed text
+                const newLine = document.createElement('div');
+                newLine.className = 'terminal-line';
+                newLine.textContent = text;
+                commandInput.parentElement.replaceChild(newLine, commandInput.parentElement.lastChild);
+                
+                // Create new input line
+                const inputLine = document.createElement('div');
+                inputLine.className = 'terminal-line';
+                const newInput = document.createElement('input');
+                newInput.type = 'text';
+                newInput.id = 'commandInput';
+                inputLine.appendChild(newInput);
+                terminal.appendChild(inputLine);
+                
+                // Focus new input
+                newInput.focus();
+                
+                // Scroll to bottom
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        });
+    </script>
 </body>
 </html>
