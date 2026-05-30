@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InstallArch Terminal</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap');
+
         * {
             margin: 0;
             padding: 0;
@@ -13,7 +15,7 @@
 
         body {
             background-color: #000000;
-            font-family: 'Courier New', monospace;
+            font-family: 'IBM Plex Mono', 'Courier New', monospace;
             height: 100vh;
             padding: 20px;
         }
@@ -25,20 +27,23 @@
             color: #ffffff;
             padding: 20px;
             overflow-y: auto;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 1.5;
+            font-family: 'IBM Plex Mono', 'Courier New', monospace;
         }
 
         .terminal-line {
             min-height: 1.5em;
+            word-wrap: break-word;
+            white-space: pre-wrap;
         }
 
         input {
             background-color: transparent;
             border: none;
             color: #ffffff;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
+            font-family: 'IBM Plex Mono', 'Courier New', monospace;
+            font-size: 14px;
             outline: none;
             width: 100%;
         }
@@ -73,34 +78,50 @@
 
     <script>
         const terminal = document.getElementById('terminal');
-        const commandInput = document.getElementById('commandInput');
-
-        commandInput.addEventListener('keydown', function(event) {
+        
+        function createInputLine() {
+            const inputLine = document.createElement('div');
+            inputLine.className = 'terminal-line';
+            inputLine.id = 'inputLine';
+            
+            const newInput = document.createElement('input');
+            newInput.type = 'text';
+            newInput.id = 'commandInput';
+            newInput.autofocus = true;
+            
+            inputLine.appendChild(newInput);
+            terminal.appendChild(inputLine);
+            
+            // Focus new input
+            newInput.focus();
+            
+            // Scroll to bottom
+            terminal.scrollTop = terminal.scrollHeight;
+            
+            // Add event listener to new input
+            newInput.addEventListener('keydown', handleKeydown);
+        }
+        
+        function handleKeydown(event) {
             if (event.key === 'Enter') {
-                const text = commandInput.value;
+                const text = event.target.value;
                 
                 // Create new line with the typed text
                 const newLine = document.createElement('div');
                 newLine.className = 'terminal-line';
                 newLine.textContent = text;
-                commandInput.parentElement.replaceChild(newLine, commandInput.parentElement.lastChild);
+                
+                // Replace input line with output line
+                const inputLine = document.getElementById('inputLine');
+                inputLine.replaceWith(newLine);
                 
                 // Create new input line
-                const inputLine = document.createElement('div');
-                inputLine.className = 'terminal-line';
-                const newInput = document.createElement('input');
-                newInput.type = 'text';
-                newInput.id = 'commandInput';
-                inputLine.appendChild(newInput);
-                terminal.appendChild(inputLine);
-                
-                // Focus new input
-                newInput.focus();
-                
-                // Scroll to bottom
-                terminal.scrollTop = terminal.scrollHeight;
+                createInputLine();
             }
-        });
+        }
+        
+        // Initial event listener
+        document.getElementById('commandInput').addEventListener('keydown', handleKeydown);
     </script>
 </body>
 </html>
