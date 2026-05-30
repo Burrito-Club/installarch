@@ -36,8 +36,17 @@
             min-height: 1.5em;
             word-wrap: break-word;
             white-space: pre-wrap;
+            display: flex;
+            align-items: flex-start;
         }
-
+        .prompt {
+            flex-shrink: 0;
+            margin-right: 0.5em;
+            user-select: none;
+        }
+        .prompt .root-red {
+            color: #ff6060;
+        }
         .purple {
             color: #b19cd9;
         }
@@ -45,7 +54,6 @@
         .light-blue-grey {
             color: #a8c5dd;
         }
-
         input {
             background-color: transparent;
             border: none;
@@ -79,67 +87,63 @@
 </head>
 <body>
     <div class="terminal" id="terminal">
-        <div class="terminal-line">archiso login: root (automatic login)</div>
-        <div class="terminal-line"></div>
-        <div class="terminal-line">to install <span class="light-blue-grey">Arch Linux</span> follow the <span class="purple">installation guide</span>:</div>
-        <div class="terminal-line"><span class="purple">https://wiki.archlinux.org/title/Installation_guide</span></div>
-        <div class="terminal-line"></div>
-        <div class="terminal-line">For Wi-Fi, authenticate to the wireless network using the <span class="purple">iwctl</span> utility.</div>
-        <div class="terminal-line">For mobile broadband (WWAN) modems, connect with the <span class="purple">mmcli</span> utility.</div>
-        <div class="terminal-line">Ethernet, WLAN and WLAN interfaces using DHCP should work automatically</div>
-        <div class="terminal-line"></div>
-        <div class="terminal-line">After connecting to the internet, the <span class="purple">installation guide</span> can be accessed via the convenience script installation_guide.</div>
-        <div class="terminal-line"></div>
+        <div class="terminal-line"><span class="prompt"><span class="root-red">root</span>@archiso ~ #</span>archiso login: root (automatic login)</div>
+        <div class="terminal-line"><span class="prompt"><span class="root-red">root</span>@archiso ~ #</span></div>
+        <div class="terminal-line"><span class="prompt"><span class="root-red">root</span>@archiso ~ #</span>to install <span class="light-blue-grey">Arch Linux</span> follow the <span class="purple">installation guide</span>:</div>
+        <div class="terminal-line"><span class="prompt"><span class="root-red">root</span>@archiso ~ #</span><span class="purple">https://wiki.archlinux.org/title/Installation_guide</span></div>
+        <div class="terminal-line"><span class="prompt"><span class="root-red">root</span>@archiso ~ #</span></div>
+        <div class="terminal-line"><span class="prompt"><span class="root-red">root</span>@archiso ~ #</span>For Wi-Fi, authenticate to the wireless network using the <span class="purple">iwctl</span> utility.</div>
+        <div class="terminal-line"><span class="prompt"><span class="root-red">root</span>@archiso ~ #</span>For mobile broadband (WWAN) modems, connect with the <span class="purple">mmcli</span> utility.</div>
+        <div class="terminal-line"><span class="prompt"><span class="root-red">root</span>@archiso ~ #</span>Ethernet, WLAN and WLAN interfaces using DHCP should work automatically</div>
+        <div class="terminal-line"><span class="prompt"><span class="root-red">root</span>@archiso ~ #</span></div>
+        <div class="terminal-line"><span class="prompt"><span class="root-red">root</span>@archiso ~ #</span>After connecting to the internet, the <span class="purple">installation guide</span> can be accessed via the convenience script installation_guide.</div>
+        <div class="terminal-line"><span class="prompt"><span class="root-red">root</span>@archiso ~ #</span></div>
         <div class="terminal-line" id="inputLine">
-            <input type="text" id="commandInput" autofocus>
+            <span class="prompt"><span class="root-red">root</span>@archiso ~ #</span><input type="text" id="commandInput" autofocus>
         </div>
     </div>
 
     <script>
         const terminal = document.getElementById('terminal');
-        
+        function createPrompt() {
+            const prompt = document.createElement('span');
+            prompt.className = 'prompt';
+            prompt.innerHTML = '<span class="root-red">root</span>@archiso ~ #';
+            return prompt;
+        }
+
         function createInputLine() {
             const inputLine = document.createElement('div');
             inputLine.className = 'terminal-line';
             inputLine.id = 'inputLine';
-            
+            const prompt = createPrompt();
             const newInput = document.createElement('input');
             newInput.type = 'text';
             newInput.id = 'commandInput';
             newInput.autofocus = true;
-            
+            inputLine.appendChild(prompt);
             inputLine.appendChild(newInput);
             terminal.appendChild(inputLine);
-            
-            // Focus new input
             newInput.focus();
-            
-            // Scroll to bottom
             terminal.scrollTop = terminal.scrollHeight;
-            
-            // Add event listener to new input
             newInput.addEventListener('keydown', handleKeydown);
         }
-        
+
         function handleKeydown(event) {
             if (event.key === 'Enter') {
                 const text = event.target.value;
-                
-                // Create new line with the typed text
                 const newLine = document.createElement('div');
                 newLine.className = 'terminal-line';
-                newLine.textContent = text;
-                
-                // Replace input line with output line
+                const prompt = createPrompt();
+                newLine.appendChild(prompt);
+                // color command input as plain text
+                newLine.appendChild(document.createTextNode(text));
                 const inputLine = document.getElementById('inputLine');
                 inputLine.replaceWith(newLine);
-                
-                // Create new input line
                 createInputLine();
             }
         }
-        
-        // Initial event listener
+
         document.getElementById('commandInput').addEventListener('keydown', handleKeydown);
     </script>
 </body>
